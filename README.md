@@ -1,125 +1,333 @@
 # Blackcoffer Insights Dashboard
 
-Full-stack MERN data visualization dashboard built for the Blackcoffer test assignment.
+A full-stack **MERN data visualization dashboard** developed for the Blackcoffer Insights Dashboard assignment.
 
-**Stack:** Node.js + Express + MongoDB (Mongoose) backend · React (Vite) + Chart.js frontend
+The application loads the provided JSON dataset into MongoDB and provides interactive visualizations, KPI cards, and filters to analyze insights across different dimensions such as intensity, likelihood, relevance, topics, regions, countries, sectors, PESTLE, and more.
+
+## 🚀 Tech Stack
+
+### Frontend
+
+* React.js
+* Vite
+* Chart.js
+* JavaScript
+* CSS
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+
+### Tools & Services
+
+* MongoDB Atlas
+* Git & GitHub
+* REST API
 
 ---
 
-## ⚠️ IMPORTANT — Before you do anything else
+## ✨ Features
 
-The `backend/data/jsondata.json` file in this project currently has only **3 sample records**
-(placeholder). Replace it with the **complete, real `jsondata.json`** file from the assignment
-before seeding, otherwise your dashboard will show almost no data.
+* Interactive dashboard
+* KPI summary cards
+* Multiple data visualizations
+* Dynamic filtering
+* Multi-select filters
+* MongoDB database integration
+* RESTful backend APIs
+* Responsive frontend
+* JSON dataset seeding
+* Real-time filtering of dashboard data
 
-```
-cp /path/to/your/real/jsondata.json backend/data/jsondata.json
+### Available Filters
+
+The dashboard supports filtering by:
+
+* End Year
+* Topic
+* Sector
+* Region
+* PESTLE
+* Source
+* SWOT
+* Country
+* City
+
+---
+
+## 📊 Dashboard Visualizations
+
+The dashboard includes visualizations for:
+
+1. **Intensity by Topic**
+2. **Year-wise Trend**
+3. **Region Distribution**
+4. **Country-wise Intensity**
+5. **Likelihood vs Relevance**
+6. **PESTLE Breakdown**
+7. **Sector vs Relevance**
+
+These charts help identify patterns and relationships within the Blackcoffer insights dataset.
+
+---
+
+## 📁 Project Structure
+
+```text
+blackcoffer-dashboard/
+│
+├── backend/
+│   ├── data/
+│   │   └── jsondata.json
+│   ├── models/
+│   ├── routes/
+│   ├── controllers/
+│   ├── scripts/
+│   ├── server.js
+│   ├── package.json
+│   └── .env.example
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── .gitignore
+└── README.md
 ```
 
 ---
 
-## 1. Backend Setup
+## 📦 Dataset
+
+The project uses the **complete provided Blackcoffer JSON dataset**, stored at:
+
+```text
+backend/data/jsondata.json
+```
+
+The dataset is seeded into MongoDB using the backend seed script.
+
+> Note: The dataset is included in the repository for the purpose of this assignment. MongoDB connection credentials are not included in the repository.
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Lakshya0604/blackcoffer-insights-dashboard.git
+cd blackcoffer-insights-dashboard
+```
+
+### 2. Backend Setup
+
+Navigate to the backend:
 
 ```bash
 cd backend
+```
+
+Install dependencies:
+
+```bash
 npm install
+```
+
+Create a `.env` file:
+
+```bash
 cp .env.example .env
 ```
 
-Edit `.env` and set `MONGO_URI`:
+Add your MongoDB connection string:
 
-- **Local MongoDB:** `mongodb://127.0.0.1:27017/blackcoffer` (make sure `mongod` is running)
-- **MongoDB Atlas (recommended, free tier is enough):**
-  1. Create a free cluster at https://www.mongodb.com/cloud/atlas
-  2. Create a DB user + allow network access from anywhere (0.0.0.0/0) for easy submission
-  3. Copy the connection string into `MONGO_URI`
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=5000
+```
 
-Seed the database from `jsondata.json`:
+Start the backend:
+
+```bash
+npm run dev
+```
+
+The backend will run on:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 🌱 Seed the Database
+
+After configuring MongoDB, run:
 
 ```bash
 npm run seed
 ```
 
-You should see something like `Inserted 1000 documents into 'insights' collection`.
+This will import the JSON dataset from:
 
-Start the API server:
-
-```bash
-npm run dev
+```text
+backend/data/jsondata.json
 ```
 
-API runs at `http://localhost:5000`. Sanity check: open `http://localhost:5000/api/filters`
-in your browser — you should see JSON with distinct topic/sector/region/etc. values.
+into MongoDB.
 
 ---
 
-## 2. Frontend Setup
+## 💻 Frontend Setup
+
+Open a new terminal and navigate to the frontend:
 
 ```bash
 cd frontend
+```
+
+Install dependencies:
+
+```bash
 npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-Opens at `http://localhost:5173`. It talks to the backend at `http://localhost:5000/api` by
-default (see `frontend/src/api.js`). To point it elsewhere, create `frontend/.env`:
+The frontend will normally be available at:
 
-```
-VITE_API_BASE=http://localhost:5000/api
+```text
+http://localhost:5173
 ```
 
 ---
 
-## 3. What's included
+## 🔗 API Endpoints
 
-**Backend API (`/api`):**
-- `GET /api/data` — raw filtered, paginated records
-- `GET /api/filters` — distinct values for every filter dropdown (topic, sector, region, pestle,
-  source, swot, country, city, end_year)
-- `GET /api/kpis` — total records, avg intensity/likelihood/relevance, top topic
-- `GET /api/chart/intensity-by-topic`
-- `GET /api/chart/year-trend`
-- `GET /api/chart/region-distribution`
-- `GET /api/chart/country-intensity`
-- `GET /api/chart/likelihood-relevance`
-- `GET /api/chart/pestle-breakdown`
-- `GET /api/chart/sector-relevance`
+### Data
 
-All endpoints accept the same filter query params (comma-separated for multi-select):
-`end_year, topic, sector, region, pestle, source, swot, country, city`
+```text
+GET /api/data
+GET /api/filters
+GET /api/kpis
+```
 
-**Frontend dashboard:**
-- Multi-select filter bar for every required filter (end year, topics, sector, region, PEST,
-  source, SWOT, country, city)
-- KPI cards: total records, avg intensity, avg likelihood, avg relevance, top topic
-- 6 interactive Chart.js visualizations:
-  1. Bar — Average Intensity by Topic
-  2. Dual-axis Line — Intensity & Record Volume trend by Start Year
-  3. Doughnut — Records by Region
-  4. Horizontal Bar — Top Countries by Record Count
-  5. Bubble Scatter — Likelihood vs Relevance (bubble size = Intensity)
-  6. Polar Area — PESTLE Category Breakdown
+### Charts
 
-**Note on `city` and `swot` fields:** In the standard Blackcoffer `jsondata.json` dataset, the
-`city` field is empty for essentially every record, and `swot` doesn't appear in most records
-either. The schema, API, and filter UI fully support both — if your actual data has values for
-them, they'll show up automatically. If not, that's expected from the source data, not a bug in
-this app — mention this in your submission notes.
+```text
+GET /api/chart/intensity-by-topic
+GET /api/chart/year-trend
+GET /api/chart/region-distribution
+GET /api/chart/country-intensity
+GET /api/chart/likelihood-relevance
+GET /api/chart/pestle-breakdown
+GET /api/chart/sector-relevance
+```
 
 ---
 
-## 4. Deployment (for submission)
+## 🔐 Environment Variables
 
-- **Database:** MongoDB Atlas (free tier)
-- **Backend:** Render or Railway (free tier) — set `MONGO_URI` and `PORT` as environment
-  variables, start command `node server.js`
-- **Frontend:** Vercel or Netlify — set `VITE_API_BASE` to your deployed backend URL, build
-  command `npm run build`, output directory `dist`
+Create a `.env` file inside the `backend` directory.
 
-## 5. Submission checklist (per assignment)
+Example:
 
-1. Push this project to a GitHub repo (public or add Blackcoffer's account as collaborator)
-2. Deploy backend + frontend (links above) — or record a short screen-capture demo
-3. Fill the Google Form: https://forms.gle/YBV6Xka5WsrPwYsB8
-4. Upload a brief write-up/article to Google Drive explaining your approach, and share that
-   Drive URL in the form
+```env
+MONGO_URI=your_mongodb_connection_string
+PORT=5000
+```
+
+**Do not commit `.env` to GitHub.**
+
+The repository uses `.gitignore` to exclude:
+
+```text
+node_modules/
+.env
+dist/
+.DS_Store
+```
+
+---
+
+## 🧪 Running the Project
+
+Start the backend:
+
+```bash
+cd backend
+npm run dev
+```
+
+Start the frontend in another terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Then open the frontend URL shown by Vite, usually:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 🎯 Assignment Objective
+
+The objective of this project is to build an interactive visualization dashboard using the provided Blackcoffer insights dataset.
+
+The dashboard allows users to explore the data through:
+
+* Interactive charts
+* KPIs
+* Filters
+* Topic analysis
+* Regional analysis
+* Country analysis
+* Sector analysis
+* PESTLE analysis
+* Likelihood and relevance analysis
+
+---
+
+## 👨‍💻 Developer
+
+**Lakshya Yadav**
+
+B.Tech Computer Science Engineering
+
+---
+
+## 📌 Project Status
+
+**Completed**
+
+The project includes:
+
+* ✅ MERN stack implementation
+* ✅ Complete JSON dataset
+* ✅ MongoDB integration
+* ✅ REST APIs
+* ✅ Interactive dashboard
+* ✅ Multiple Chart.js visualizations
+* ✅ Dynamic filtering
+* ✅ GitHub repository
+* ✅ Environment variable protection
+
+---
+
+## 📄 License
+
+This project was developed for educational and assignment purposes.
